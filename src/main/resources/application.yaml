@@ -1,3 +1,9 @@
 spring:
   application:
     name: urlShortener
+
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=url_shortener;encrypt=true;trustServerCertificate=true
+    username: sa
+    password: AkzZ@1234
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
