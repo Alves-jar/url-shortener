@@ -13,9 +13,9 @@ BEGIN
         id            BIGINT IDENTITY(1,1) PRIMARY KEY,
         shorten_code  VARCHAR(20)      NOT NULL UNIQUE,
         original_url  NVARCHAR(2000)   NOT NULL,
-        clicks       BIGINT           NOT NULL DEFAULT 0,
-        createdAt  DATETIME2        NOT NULL DEFAULT GETDATE(),
-        expireAt DATETIME2       NULL
+        clicks        BIGINT           NOT NULL DEFAULT 0,
+        created_at    DATETIME2        NOT NULL DEFAULT GETDATE(),
+        expire_at     DATETIME2        NULL
     );
 
     CREATE INDEX idx_shorten_code ON urls(shorten_code);
