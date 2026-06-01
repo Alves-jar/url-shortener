@@ -42,7 +42,7 @@ public class UrlService {
             }
 
             String shortCode = sb.substring(0, 8);
-            Url shortUrl = new Url(url, shortCode);
+            Url shortUrl = Url.createUrl(url, shortCode);
 
             return repository.save(shortUrl);
 

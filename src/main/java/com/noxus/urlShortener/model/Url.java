@@ -55,4 +55,13 @@ public class Url {
 
     public LocalDateTime getExpireAt() { return expireAt; }
     public void setExpireAt(LocalDateTime expireAt) { this.expireAt = expireAt; }
+
+    public static Url createUrl(String originalUrl, String shortCode) {
+
+        Url newUrl = new Url(originalUrl, shortCode);
+        newUrl.clicks = 0L;
+        newUrl.expireAt = LocalDateTime.now().plusDays(7);
+
+        return newUrl;
+    }
 }
