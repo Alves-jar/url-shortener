@@ -79,6 +79,18 @@ public class UrlService {
         }
     }
 
+    public Url go(String shortCode) {
+
+        Url url = repository
+            .findByShortenCode(shortCode)
+            .orElseThrow(() ->
+                new RuntimeException("URL not found"));
+
+        url.setClicks(url.getClicks() + 1);
+
+        return repository.save(url);
+    }
+
     private boolean verifyUrl(String url) {
 
         try {

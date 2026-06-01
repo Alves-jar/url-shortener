@@ -5,6 +5,7 @@ import com.noxus.urlShortener.model.Url;
 import com.noxus.urlShortener.service.UrlService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,5 +33,18 @@ public class UrlController {
 
         Url existingUrl = service.getUrl(url);
         return ResponseEntity.ok(existingUrl);
+    }
+
+    @GetMapping("/{shortCode}")
+    public ResponseEntity<Void> redirect(
+        @PathVariable String shortCode
+    ) {
+
+        Url url = service.go(shortCode);
+
+        return ResponseEntity
+            .status(302)
+            .location(URI.create(url.getOriginalUrl()))
+            .build();
     }
 }
