@@ -25,6 +25,14 @@ public class UrlService {
 
         try {
 
+            Url existingUrl = repository
+                .findByOriginalUrl(url)
+                .orElse(null);
+
+            if (existingUrl != null) {
+                return existingUrl;
+            }
+
             URI uri = new URI(url);
             String path = uri.getPath();
 
@@ -32,22 +40,42 @@ public class UrlService {
                 path = url;
             }
 
-            String text = path.substring(0, Math.min(5, path.length()));
+            path.substring(0, Math.min(5, path.length()));
             MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] hashBytes = md.digest(url.getBytes(StandardCharsets.UTF_8));
+            byte[] hashBytes = md.digest(
+                url.getBytes(StandardCharsets.UTF_8)
+            );
             StringBuilder sb = new StringBuilder();
 
             for (byte b : hashBytes) {
                 sb.append(String.format("%02x", b));
             }
 
-            String shortCode = sb.substring(0, 8);
+            String shortCode = sb.toString().substring(0, 8);
             Url shortUrl = Url.createUrl(url, shortCode);
 
             return repository.save(shortUrl);
 
         } catch (Exception e) {
             throw new RuntimeException("Error while saving URL", e);
+        }
+    }
+
+    public Url getUrl(String url) {
+
+        if (!verifyUrl(url)) {
+            throw new IllegalArgumentException("Invalid URL");
+        }
+
+        try {
+
+            return repository
+                .findByOriginalUrl(url)
+                .orElseThrow(() ->
+                    new RuntimeException("URL not found"));
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error while getting URL", e);
         }
     }
 
