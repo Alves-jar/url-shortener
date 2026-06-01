@@ -8,6 +8,14 @@ import java.time.LocalDateTime;
 @Table(name = "urls")
 public class Url {
 
+    public Url() {
+    }
+
+    public Url(String originalUrl, String shortenCode) {
+        this.originalUrl = originalUrl;
+        this.shortenCode = shortenCode;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
