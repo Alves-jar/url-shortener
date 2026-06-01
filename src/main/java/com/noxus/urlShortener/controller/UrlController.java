@@ -40,11 +40,22 @@ public class UrlController {
         @PathVariable String shortCode
     ) {
 
-        Url url = service.go(shortCode);
+        try {
 
-        return ResponseEntity
-            .status(302)
-            .location(URI.create(url.getOriginalUrl()))
-            .build();
+            Url url = service.go(shortCode);
+
+            return ResponseEntity
+                .status(HttpStatus.FOUND)
+                .location(URI.create(url.getOriginalUrl()))
+                .build();
+
+        } catch (RuntimeException e) {
+
+            if (e.getMessage().equals("URL expired")) {
+                return ResponseEntity.status(HttpStatus.GONE).build();
+            }
+
+            return ResponseEntity.notFound().build();
+        }
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.time.LocalDateTime;
 
 @Service
 public class UrlService {
@@ -86,6 +87,13 @@ public class UrlService {
             .orElseThrow(() ->
                 new RuntimeException("URL not found"));
 
+        if (
+            url.getExpireAt() != null &&
+                LocalDateTime.now().isAfter(url.getExpireAt())
+        ) {
+            repository.delete(url);
+            throw new RuntimeException("URL expired");
+        }
         url.setClicks(url.getClicks() + 1);
 
         return repository.save(url);
